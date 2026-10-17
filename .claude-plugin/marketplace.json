@@ -1,0 +1,20 @@
+{
+  "name": "andrewha-xyz",
+  "owner": {
+    "name": "Andrey Ilinskiy",
+    "url": "https://github.com/andrewha-xyz"
+  },
+  "metadata": {
+    "description": "Skills by Andrey Ilinskiy"
+  },
+  "plugins": [
+    {
+      "name": "tufte",
+      "source": "./",
+      "description": "Tufte-native data graphics: twelve rules, design/review/infographic workflows, deterministic checks, matplotlib forms.",
+      "version": "1.0.0",
+      "category": "design",
+      "keywords": ["data-visualization", "tufte", "charts", "sparklines", "infographic"]
+    }
+  ]
+}
