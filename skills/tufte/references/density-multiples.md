@@ -36,6 +36,19 @@ Tufte's definition: a small, intense, simple, word-sized graphic with typographi
 - Binary outcomes (win/loss) can be shown as ticks up or down per event; Tufte warns that such sparklines can produce accidental white-space patterns that read as shape.
 - Period totals (a flow) make a dot-per-period sparkline or tiny bars, not a line; see the state-or-flow test in `integrity.md`.
 
+## Dashboards (the sparkline table, extended)
+
+Tufte's dashboard is the sparkline table above; he says little about a screen of several charts. These rules come from a secondary source, the dashboard pages at bureau.ru (under https://bureau.ru/soviet/: 20241211 one encoding, 20240221 logic and usability, 20260318 and 20260415 assembly, 20260610 a critique, 20090820 a sensor sheet answered with Tufte's patient summary), and do not conflict with his.
+
+- One particle, one encoding. Every chart of one dataset is built from that dataset's particle (SKILL.md step 0), so the same thing looks the same everywhere; a page with two datasets (purchases and tickets) has two particles, each consistent across its own charts: one color scale for the key variable, never two overlapping scales; one variable keeps one encoding wherever it appears (the same mark, color and scale), its subsets (branches, products) are small multiples of one form, and a second form of the same variable (a timeline beside a quartile plot) answers a second, stated comparison; a different variable gets the form its state-or-flow test and comparison call for, not a matching one for symmetry.
+- Replicate, do not invent. Draw one zone, one branch, one entity, and repeat it; position then identifies the entity. Readings that compare in absolute terms share one physical scale; when each entity has its own normal range (the sensor sheet), draw the deviation from that range as the measure, labelled as such, so the aligned ticks mean the same thing in every row. Print the latest value to the right of each sparkline, as the sparkline table does.
+- The biggest format anchors the layout (a map, the main series). On an interactive screen the side charts filter it and detail sits behind a click; a printed sheet keeps the detail on the page. Blocks ordered big to small and important to less so; a control sits beside the block it controls (a period selector far from its chart is the first defect found in review).
+- A number without its unit and its period is not a number. Decimals trimmed to what the decision needs. Each top-level figure is decomposed on the page into the components it comes from.
+- One screen is not a thing in itself: identical terms for identical concepts across screens, and the page answers the stated business questions, or nothing else matters.
+- Show more, not less, while it stays legible: enlarge the sparklines before adding a tile.
+
+Rubric: `review-rubric.md` A9, D8.
+
 ## Micro/macro readings (Envisioning Information ch. 2)
 
 A dense display that reads at two levels: the overall pattern from across the room, the individual entries up close. Tufte's examples are maps, the Vietnam Veterans Memorial (58,000 names, readable as one shape and as each name), the Tokyo population map, a rail timetable. His stated strategy, which he calls his most unconventional (p. 37): to clarify, add detail. Design the macro first (what shape should the whole make), then make sure every micro entry is legible and labeled. Confusion and clutter are failures of design, not attributes of information (ch. 3, around p. 51 to 53): the fix is better layering, not fewer numbers. Comparisons must be enforced within the scope of the eyespan: put the things to be compared on one page, side by side, so the eye and not the memory does the comparing. Multifunctioning graphical elements (p. 47): one mark that carries two variables (a tick that is also a data point, a label that is also a scale) raises density without adding ink.

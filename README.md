@@ -32,8 +32,9 @@ Three modes, chosen from the request:
 | `skills/tufte/SKILL.md` | the twelve rules, three workflows, screen deviations |
 | `skills/tufte/references/integrity.md` | lie factor, six principles of graphical integrity, aspect ratio, context, order by cause, Challenger with its caveat, corruption in evidence |
 | `skills/tufte/references/data-ink.md` | data-ink ratio, erase and erase-redundant, chartjunk, range-frame, dot-dash-plot, quartile plot, table-graphic |
-| `skills/tufte/references/density-multiples.md` | data density, shrink principle, small multiples, sparklines, micro/macro, layering |
-| `skills/tufte/references/analytical-design.md` | six principles of analytical design, Snow, smallest effective difference, friendly graphic, slides, confections, color |
+| `skills/tufte/references/density-multiples.md` | data density, shrink principle, small multiples, sparklines, dashboards, micro/macro, layering |
+| `skills/tufte/references/analytical-design.md` | six principles of analytical design, Snow, smallest effective difference, friendly graphic, the page (inner before outer), slides, confections, color |
+| `skills/tufte/references/tables.md` | table layout: alignment by digit place, one header tier, no repeated words, no rules, order; when a table should become a graphic |
 | `skills/tufte/references/review-rubric.md` | scored audit template and output format |
 | `skills/tufte/references/recipes.md` | matplotlib, plotly, vega-lite, SVG recipes |
 | `skills/tufte/scripts/tufte_mpl.py` | matplotlib theme; forms `range_frame`, `frame`, `dot_dash`, `sparkline`, `slopegraph`, `quartile`; words `headline`, `source`, `note`, `callout`; `uv run --locked "skills/tufte/scripts/tufte_mpl.py" demo` renders a self-check |
@@ -44,7 +45,7 @@ Three modes, chosen from the request:
 
 ## Example
 
-`examples/dalio/big_debt_cycle.py` draws four stacked panels from FRED (all-sector debt to GDP, 3-month Treasury rate, Fed assets to GDP, unemployment, 1947 to 2026) with Dalio's phases annotated on the curve. Each panel's height banks its median segment slope toward 45 degrees on its own scale, subject to a legibility floor; the page is placed by one rule, one gap and one edge, and `--structure` renders the same page with its blocks and gaps drawn (it writes `big-debt-cycle-structure.rendered.png`; the checked-in `big-debt-cycle-structure.png` is that output). Run it with `uv run --locked examples/dalio/big_debt_cycle.py`; it writes `big-debt-cycle.rendered.png` in the working directory, and the csv snapshot is included so it reproduces offline. The preview above is the pre-rendered copy.
+`examples/dalio/big_debt_cycle.py` draws four stacked panels from FRED (all-sector debt to GDP, 3-month Treasury rate, Fed assets to GDP, unemployment, 1947 to 2026) with Dalio's phases annotated on the curve. Each panel's height banks its median segment slope toward 45 degrees on its own scale, subject to a legibility floor; the page is placed on one left edge with its blocks and margin drawn by one rule, and `--structure` renders the same page with its blocks and gaps drawn (it writes `big-debt-cycle-structure.rendered.png`; the checked-in `big-debt-cycle-structure.png` is that output). Run it with `uv run --locked examples/dalio/big_debt_cycle.py`; it writes `big-debt-cycle.rendered.png` in the working directory, and the csv snapshot is included so it reproduces offline. The preview above is the pre-rendered copy.
 
 ## Sources and verification
 
@@ -57,6 +58,7 @@ Written from the books, then checked against whatever primary text could be read
 | Visual Explanations (1997) | Snow's cholera map and the Challenger decision (ch. 2, pp. 27 to 53); smallest effective difference (ch. 4, p. 73); visual confections (ch. 7, p. 121) | ch. 2 against a scan of the chapter; chs. 4 and 7 against reviews and course pages only. The Challenger caveat cites Robison, Boisjoly, Hoeker and Young 2002 |
 | Beautiful Evidence (2006) | sparklines (ch. 2, pp. 46 to 63); fundamental principles of analytical design (ch. 5, p. 122); corruption in evidence presentations (ch. 6, p. 140); the cognitive style of PowerPoint (ch. 7, p. 156); mapped pictures (ch. 1); words, numbers, images (ch. 4) | ch. 2 against Tufte's online version (edwardtufte.com, "Sparkline theory and practice"); ch. 7 and the Columbia material against edwardtufte.com; chs. 5 and 6 against excerpts and secondary summaries, so the six principles are close to Tufte's wording but principle 2 is not verbatim-verified |
 | The Cognitive Style of PowerPoint (essay, 2003; 2nd ed. 2006) | low resolution, pitching, the Columbia slide, technical reports over slides | edwardtufte.com notebook entries |
+| bureau.ru advice column (secondary; Gorbunov, Birman, Misyutina, 2009 to 2026) | what Tufte does not cover: the datum and the Δλ method (step 0; https://bureau.ru/soviet/selected/yuriy-kobryanov/po-sledam-edvarda-tafti/ and the Принципы визуализации series), page spacing as inner before outer, anchor objects, rhythm, leader lines (https://bureau.ru/soviet/selected/nataliya-tyzhinova/osnovy-vyorstki/, 20140818, 20140224, 20140324, 20131104, 20140310, 20211020, 20140728), tables (https://bureau.ru/soviet/selected/dima-shishkin/birman-pilit-tablitsy/), dashboards (20241211, 20240221, 20260318, 20260415, 20260610, 20090820), stepped bars for period totals (20240821) | the pages themselves, read online in October 2026 (text only; before-and-after pictures were not available, and rules whose argument was the picture say so). Bureau's books are subscription-only and were not used; the free demo chapter of Типографика и вёрстка matches 20140818 |
 
 Claims that were in an early draft and removed because no source supports them as Tufte's: "grey is the great harmonizer", an Imhof rule about the color circle, "resolution over sequence" as a phrase, "a page of 11-point type beats twenty slides", "superstition" about zero baselines, the golden ratio as Tufte's default shape.
 
@@ -66,7 +68,7 @@ Narrative arcs and slide storytelling (Knaflic), KPI tiles and gauges-versus-bul
 
 ## Known limits of `tufte_mpl.py`
 
-`slopegraph` assumes a linear y-axis and single-line names, and must be called last on its panel; in a grid, hide every slopegraph panel's axes before the first call. `headline` and `source` wrap by measuring the rendered text and may still overrun by a few pixels in unusual fonts. `note` and `callout` place text where you tell them; choosing empty space and checking the render is the author's job.
+`slopegraph` assumes a linear y-axis and single-line names, and must be called last on its panel; in a grid, hide every slopegraph panel's axes before the first call. `headline` and `source` wrap by measuring the rendered text and may still overrun by a few pixels in unusual fonts. `note` and `callout` place text where you tell them; choosing empty space and checking the render is the author's job. The Dalio example predates the inner-before-outer rule: its title-to-plot gap equals its block gap, so it shows the edge, the blocks and the margin but not the spacing hierarchy.
 
 ## License
 
