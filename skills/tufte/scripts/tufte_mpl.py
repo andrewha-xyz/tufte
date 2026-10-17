@@ -181,25 +181,35 @@ def quartile(ax, groups, labels):
     ax.tick_params(axis="x", length=0)
 
 
-def frame(ax, xticks, yticks, xlim=None, ylim=None, xlabels=None):
-    """Range frame with chosen ticks: spines span the first to last tick, limits cover the data.
+def frame(ax, xticks, yticks, xlim=None, ylim=None, xlabels=None, span=None):
+    """Range frame with chosen ticks. The bottom spine spans the data (`span` = (first, last)
+    x of the data, which is the range-frame idea) or, without `span`, the first to last tick;
+    the left spine spans the ticks; limits cover the data.
 
-    Use when min/max ticks alone would not read (time axes, round numbers). xticks may be dates."""
+    Use when min/max ticks alone would not read (time axes, round numbers). xticks and span
+    may be dates."""
     ax.set_xticks(xticks, xlabels)
     ax.set_yticks(yticks)
     if xlim is not None:
         ax.set_xlim(*xlim)
     if ylim is not None:
         ax.set_ylim(*ylim)
-    x0, x1 = ax.convert_xunits(xticks[0]), ax.convert_xunits(xticks[-1])
-    ax.spines["bottom"].set_bounds(x0, x1)
+    lo, hi = span if span is not None else (xticks[0], xticks[-1])
+    lo, hi = sorted((ax.convert_xunits(lo), ax.convert_xunits(hi)))
+    xb0, xb1 = ax.get_xbound()                                   # ascending even on a reversed axis
+    if hi < xb0 or lo > xb1:
+        ax.spines["bottom"].set_visible(False)                   # nothing of the span is in view
+    else:
+        ax.spines["bottom"].set_visible(True)
+        ax.spines["bottom"].set_bounds(max(lo, xb0), min(hi, xb1))   # never past the axes box
     ax.spines["left"].set_bounds(min(yticks), max(yticks))
     ax.tick_params(length=3)
 
 
 def mark(ax, x, y):
-    """One accent dot at a data point; returns nothing, use with note or callout."""
-    ax.plot([x], [y], "o", ms=3, color=ACCENT, zorder=3)
+    """One accent dot at a data point, drawn unclipped so a point on the axes edge (a zero, a
+    maximum at the top of the range) keeps its whole dot; use with note or callout."""
+    ax.plot([x], [y], "o", ms=3, color=ACCENT, zorder=3, clip_on=False)
 
 
 def note(ax, x, y, text, side="right", dy=0, fontsize=8):

@@ -34,7 +34,7 @@ a, b, c, d = axs
 
 top_date = ratio["2008":"2010"].idxmax()
 a.plot(ratio, color=t.INK)
-t.frame(a, decades, [100, 200, 300, 400], xlim=span, ylim=(100, 445), xlabels=[str(x.year) for x in decades])
+t.frame(a, decades, [100, 200, 300, 400], xlim=span, ylim=(100, 445), xlabels=[str(x.year) for x in decades], span=(ratio.index[0], ratio.index[-1]))
 a.set_ylabel("debt, % of GDP")
 t.note(a, T("2005-01-01"), at(ratio, "2005-01-01"), "bubble: debt rising faster than income, 2003 to 2007", side="left")
 t.note(a, top_date, ratio[top_date], f"top, {top_date.to_period('Q')}: {ratio[top_date]:.0f}%", side="left", dy=8)
@@ -44,7 +44,7 @@ t.callout(a, T("2013-01-01"), at(ratio, "2013-01-01"),
           at=(T("1988-01-01"), 185))
 
 b.plot(rate, color=t.INK, lw=0.8)
-t.frame(b, decades, [0, 5, 10, 15], ylim=(0, 17))
+t.frame(b, decades, [0, 5, 10, 15], ylim=(0, 17), span=(rate.index[0], rate.index[-1]))
 b.set_ylabel("3-month rate, %")
 t.note(b, T("1981-05-01"), at(rate, "1981-05-01"), "%.0f%% in 1981" % at(rate, "1981-05-01"), dy=4)
 words = (T("1997-01-01"), 12.5)
@@ -53,7 +53,7 @@ t.callout(b, T("2011-01-01"), at(rate, "2011-01-01"),
 t.callout(b, T("2020-10-01"), at(rate, "2020-10-01"), "", at=(T("2011-06-01"), 10.3))
 
 c.plot(fed_gdp, color=t.INK, lw=0.8)
-t.frame(c, decades, [0, 20, 40], ylim=(0, 40))
+t.frame(c, decades, [0, 20, 40], ylim=(0, 40), span=(fed_gdp.index[0], fed_gdp.index[-1]))
 c.set_ylabel("Fed assets, % of GDP")
 t.note(c, T("2007-07-01"), at(fed_gdp, "2007-07-01"), "%.0f%% before the top" % at(fed_gdp, "2007-07-01"), side="left", dy=6)
 t.note(c, T("2014-10-01"), at(fed_gdp, "2014-10-01"), "after QE1 to QE3: %.0f%%" % at(fed_gdp, "2014-10-01"), side="left", dy=6)
@@ -61,7 +61,7 @@ t.note(c, T("2021-10-01"), at(fed_gdp, "2021-10-01"), "2021: %.0f%%" % at(fed_gd
 c.text(T("1950-01-01"), 20, "weekly series begins in 2002", fontsize=8, color=t.GREY, va="center")
 
 d.plot(unemp, color=t.INK, lw=0.8)
-t.frame(d, decades, [0, 5, 10, 15], ylim=(0, 16))
+t.frame(d, decades, [0, 5, 10, 15], ylim=(0, 16), span=(unemp.index[0], unemp.index[-1]))
 d.set_ylabel("unemployment, %")
 t.note(d, T("2009-10-01"), at(unemp, "2009-10-01"), "%.1f%% in October 2009" % at(unemp, "2009-10-01"), side="left", dy=6)
 t.note(d, T("2020-04-01"), at(unemp, "2020-04-01"), "%.1f%% in April 2020" % at(unemp, "2020-04-01"), dy=5)

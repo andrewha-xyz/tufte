@@ -23,7 +23,7 @@ Write the real absolute path into generated code; `${CLAUDE_SKILL_DIR}` is subst
 
 Lock it once with `uv lock --script chart.py` and run it with `uv run --locked chart.py`; the header and the lockfile are the whole dependency story.
 
-Forms provided: `t.range_frame(ax, x, y)`, `t.frame(ax, xticks, yticks, xlim=None, ylim=None)` (range frame with chosen ticks, dates allowed), `t.dot_dash(ax, x, y)`, `t.sparkline(ax, y, label=...)`, `t.slopegraph(ax, left, right, names, highlight=(...), ylim=None)` (labels nudge apart on ties and stay inside the panel, horizontal room is reserved for the names; the lines stay true; call it last, once every title, label and panel of the figure is in place; panels that share a y-axis pass the same ascending `ylim`, and `sharex` is refused; it raises with the needed height or width when the rows or names cannot fit), `t.quartile(ax, groups, labels)`. `use()` sets the color cycle to ink, grey, accent, so ordinary `ax.plot` calls stay monochrome. Self-check: `uv run --locked "<skill dir>/scripts/tufte_mpl.py" demo` writes `tufte-demo.png` in the working directory.
+Forms provided: `t.range_frame(ax, x, y)`, `t.frame(ax, xticks, yticks, xlim=None, ylim=None, span=None)` (range frame with chosen ticks; `span` makes the axis line run exactly the data's length; dates allowed), `t.dot_dash(ax, x, y)`, `t.sparkline(ax, y, label=...)`, `t.slopegraph(ax, left, right, names, highlight=(...), ylim=None)` (labels nudge apart on ties and stay inside the panel, horizontal room is reserved for the names; the lines stay true; call it last, once every title, label and panel of the figure is in place; panels that share a y-axis pass the same ascending `ylim`, and `sharex` is refused; it raises with the needed height or width when the rows or names cannot fit), `t.quartile(ax, groups, labels)`. `use()` sets the color cycle to ink, grey, accent, so ordinary `ax.plot` calls stay monochrome. Self-check: `uv run --locked "<skill dir>/scripts/tufte_mpl.py" demo` writes `tufte-demo.png` in the working directory.
 
 Small multiples, one panel per series, grid sized from the series count, one faint reference line (the mean across series) per panel instead of redrawing every series everywhere:
 
@@ -69,7 +69,7 @@ t.note(ax, x_event, y_event, "stockout, March", side="left", dy=6)    # beside t
 t.callout(ax, x_peak, y_peak, "record quarter: 1,240 orders\nbefore the stockout",
           at=(x_empty, y_empty))                                     # in empty space, thin grey leader
 t.callout(ax, x_other, y_other, "", at=(x_empty, y_empty))           # second leader to the same words
-t.frame(ax, xticks=years, yticks=[0, 500, 1000], ylim=(0, 1300))     # spines span the ticks, limits cover data
+t.frame(ax, xticks=years, yticks=[0, 500, 1000], ylim=(0, 1300), span=(x[0], x[-1]))   # bottom spine spans the data, left spine the ticks
 t.source(fig, "Source: orders table, fetched 2026-10-17; a quarter is three calendar months.")
 ```
 
