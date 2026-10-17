@@ -5,6 +5,7 @@
 """Tufte theme and forms for matplotlib.
 
 Forms: range_frame, frame, dot_dash, sparkline, slopegraph, quartile.
+Layout: page (Müller-Brockmann grid: margins, baseline, columns, fields; field/text/headline/show).
 Words on the graphic: note (sentence beside a mark), callout (sentence in empty space with a
 leader), headline (wrapped finding at the top), source (wrapped sources at the bottom).
 
@@ -36,6 +37,7 @@ RC = {
     "xtick.direction": "out", "ytick.direction": "out",
     "xtick.major.size": 3, "ytick.major.size": 3,
     "xtick.major.width": 0.6, "ytick.major.width": 0.6,
+    "xtick.major.pad": 2, "ytick.major.pad": 2,
     "font.family": "serif", "font.size": 9, "axes.titlesize": 10, "axes.labelsize": 9,
     "legend.frameon": False, "lines.linewidth": 1.0, "lines.color": INK,
     "savefig.dpi": 200, "savefig.bbox": "tight",
@@ -223,23 +225,32 @@ def callout(ax, x, y, text, at, ha="left", fontsize=8):
                 color=ACCENT, arrowprops=dict(arrowstyle="-", color=GREY, lw=0.5, shrinkB=3))
 
 
-def _fit(fig, artist, text, fontsize, width):
-    """Set wrapped text on the artist; measure it; narrow the wrap until it fits fig's width.
+def _fit(fig, artist, text, fontsize, width, avail_px=None, strict=False):
+    """Set wrapped text on the artist; measure it; narrow the wrap until it fits.
 
-    Starts from the serif estimate (about 0.55 em per character) or the caller's width, then
-    measures the rendered block, so unusual fonts still fit. Works for a Figure or SubFigure."""
+    avail_px: the width to fit, in pixels; default 98 percent of fig's width. Starts from the
+    serif estimate (about 0.55 em per character) or the caller's width, then measures the
+    rendered block, so unusual fonts still fit. Works for a Figure or SubFigure.
+    strict=False (headline, source): long words are broken across lines as a last resort and
+    the call always returns. strict=True (page.text): words stay whole and a word that cannot
+    fit raises ValueError after removing the artist."""
     import textwrap
     fig.canvas.draw()                         # settle layout before measuring the space
-    avail = fig.bbox.width * 0.98
-    if width is None:
-        width = int(avail / fig.dpi * 72 / (fontsize * 0.55))
+    avail = avail_px if avail_px is not None else fig.bbox.width * 0.98
+    if width is None:                         # start from one line, so a line that fits is never split
+        width = max(len(text), int(avail / fig.dpi * 72 / (fontsize * 0.55)))
     width = max(1, width)
     while True:                               # width strictly decreases, so this terminates
-        artist.set_text(textwrap.fill(text, width))
+        artist.set_text(textwrap.fill(text, width, break_long_words=not strict, break_on_hyphens=not strict))
         fig.canvas.draw()
-        avail = fig.bbox.width * 0.98         # a SubFigure may have shrunk during the draw
-        if artist.get_window_extent().width <= avail or width == 1:
+        if avail_px is None:
+            avail = fig.bbox.width * 0.98     # a SubFigure may have shrunk during the draw
+        if artist.get_window_extent().width <= avail or (width == 1 and not strict):
             return
+        if width == 1:
+            artist.remove()
+            raise ValueError("text does not fit the available width without breaking a word; "
+                             "widen the figure or span, or shorten the words")
         width = max(1, int(width * 0.9))
 
 
@@ -252,6 +263,105 @@ def headline(fig, text, width=None, fontsize=11):
 def source(fig, text, width=None, fontsize=7.5):
     """Sources, definitions and caveats under the figure, wrapped by measurement, in grey."""
     _fit(fig, fig.text(0.01, -0.02, "", fontsize=fontsize, color=GREY, va="top"), text, fontsize, width)
+
+
+class page:
+    """Müller-Brockmann grid for a figure: margins, a baseline, columns with one gutter, fields.
+
+    cols: number of columns; baseline: points; margins: inches (left, right, top, bottom);
+    gutter: points, default two baselines so hung axis labels fit between panels. Rows count
+    baselines from the top margin; a text baseline sits 0.3 of the leading above its row's
+    bottom edge. Nothing global is changed.
+    field(c0, span, row, rows, pad=(1, 1)) returns an Axes inside those columns and baselines,
+    keeping pad[0] baselines above for the title and pad[1] below for tick labels (pad=(0, 0)
+    for a bare field such as a table or an image);
+    title(ax, text) sets the one-line panel title with its baseline on the grid row above the axes;
+    text(c0, span, row, text, ...) sets wrapped text, measured to the span, with its first
+    baseline on that row and the lines one baseline apart;
+    headline(text, rows) is text across all columns that raises if it needs more rows;
+    save(path) exports at the page size and the figure's dpi (set dpi on the figure first;
+    the theme's tight bbox would crop the margins). Sources and footers go through text()
+    on reserved rows: the module-level source() sits outside a fixed page. Images in a bare
+    field need ax.set_adjustable("datalim") or aspect="auto", or imshow shrinks the axes
+    rectangle off the column lines;
+    show() draws dotted column lines and row edges and solid text baselines for checking."""
+
+    def __init__(self, fig, cols=12, baseline=14.0, margins=(0.6, 0.6, 0.7, 0.6), gutter=None):
+        self.fig, self.cols, self.baseline = fig, cols, float(baseline)
+        self.gutter = 2 * self.baseline if gutter is None else float(gutter)
+        w, h = fig.get_size_inches()
+        self.W, self.H = w * 72, h * 72
+        ml, mr, mt, mb = (m * 72 for m in margins)
+        self.x0, self.top, self.bottom = ml, self.H - mt, mb
+        self.colw = (self.W - ml - mr - (cols - 1) * self.gutter) / cols
+
+    def rect(self, c0, span, row, rows):
+        """Figure-fraction (x, y, w, h) for columns c0..c0+span and baselines row..row+rows."""
+        x = self.x0 + c0 * (self.colw + self.gutter)
+        w = span * self.colw + (span - 1) * self.gutter
+        y_top = self.top - row * self.baseline
+        hgt = rows * self.baseline
+        return x / self.W, (y_top - hgt) / self.H, w / self.W, hgt / self.H
+
+    def field(self, c0, span, row, rows, pad=(1, 1)):
+        return self.fig.add_axes(self.rect(c0, span, row + pad[0], rows - pad[0] - pad[1]))
+
+    def title(self, ax, text, **kw):
+        """Panel title whose baseline sits on the grid row above the axes (pad = 0.3 baseline).
+        y=1.0 pins it there: matplotlib would otherwise lift it over an axis offset label, so
+        avoid scientific-notation offsets (use a tick formatter) in gridded panels."""
+        if "\n" in text:
+            raise ValueError("page.title: one line only; a second line would leave the baseline grid. "
+                             "Put the rest in a note with page.text")
+        return ax.set_title(text, loc=kw.pop("loc", "left"), y=1.0, pad=0.3 * self.baseline, **kw)
+
+    def baseline_y(self, row):
+        """Figure-fraction y of the text baseline of `row`."""
+        return (self.top - (row + 1) * self.baseline + 0.3 * self.baseline) / self.H
+
+    def text(self, c0, span, row, text, fontsize=None, color=INK, weight="normal", rows=None):
+        """Wrapped text measured to the span's width, one Text artist per line, each on its own
+        baseline from `row` downwards (matplotlib lays multi-line text out by glyph extents, so
+        a single artist cannot hold a baseline grid). Returns the list of line artists. With
+        `rows`, raises if the text needs more rows than that; raises if a word cannot fit."""
+        fontsize = fontsize or self.baseline / 1.4
+        x, _, w, _ = self.rect(c0, span, row, 1)
+        probe = self.fig.text(x, self.baseline_y(row), "", fontsize=fontsize, weight=weight, va="baseline", ha="left")
+        _fit(self.fig, probe, text, fontsize, None, avail_px=w * self.W / 72 * self.fig.dpi, strict=True)
+        lines = probe.get_text().split("\n")
+        probe.remove()
+        if rows is not None and len(lines) > rows:
+            raise ValueError(f"page.text: {len(lines)} lines need {len(lines)} rows, {rows} given; "
+                             "shorten the text, widen the span, or allow more rows")
+        return [self.fig.text(x, self.baseline_y(row + i), line, fontsize=fontsize, color=color,
+                              weight=weight, va="baseline", ha="left") for i, line in enumerate(lines)]
+
+    def headline(self, text, rows=2, fontsize=None):
+        """The finding across all columns, starting on row 0; raises if it needs more than `rows`."""
+        return self.text(0, self.cols, 0, text, fontsize=fontsize or self.baseline * 1.1, rows=rows)
+
+    def save(self, path, **kw):
+        """Export the page at its configured size and at the figure's own dpi, so the text that
+        was measured is the text that is drawn (the theme's tight bbox would crop the margins,
+        and bbox_inches=None only defers to that setting, so both are overridden here)."""
+        kw.setdefault("dpi", self.fig.dpi)
+        with mpl.rc_context({"savefig.bbox": None}):
+            self.fig.savefig(path, **kw)
+
+    def show(self):
+        """Overlay for checking: dotted column lines, dotted row edges (where panel edges sit) and
+        solid text baselines, 0.3 baseline above each row edge."""
+        right = (self.x0 + self.cols * self.colw + (self.cols - 1) * self.gutter) / self.W
+        for c in range(self.cols):
+            x, _, w, _ = self.rect(c, 1, 0, 1)
+            self.fig.add_artist(plt.Rectangle((x, self.bottom / self.H), w, (self.top - self.bottom) / self.H,
+                                              fc="none", ec=LIGHT, lw=0.4, ls=":"))
+        for r in range(int((self.top - self.bottom) / self.baseline) + 1):
+            edge = (self.top - r * self.baseline) / self.H
+            self.fig.add_artist(plt.Line2D([self.x0 / self.W, right], [edge, edge], color=LIGHT, lw=0.3, ls=":"))
+            if edge > self.bottom / self.H:
+                y = self.baseline_y(r)
+                self.fig.add_artist(plt.Line2D([self.x0 / self.W, right], [y, y], color=LIGHT, lw=0.3))
 
 
 def demo(path="tufte-demo.png"):

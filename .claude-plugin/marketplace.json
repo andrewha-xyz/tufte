@@ -12,7 +12,7 @@
       "name": "tufte",
       "source": "./",
       "description": "Tufte-native data graphics: twelve rules, design/review/infographic workflows, deterministic checks, matplotlib forms.",
-      "version": "1.0.0",
+      "version": "1.1.0",
       "category": "design",
       "keywords": ["data-visualization", "tufte", "charts", "sparklines", "infographic"]
     }

@@ -34,9 +34,10 @@ Three modes, chosen from the request:
 | `skills/tufte/references/data-ink.md` | data-ink ratio, erase and erase-redundant, chartjunk, range-frame, dot-dash-plot, quartile plot, table-graphic |
 | `skills/tufte/references/density-multiples.md` | data density, shrink principle, small multiples, sparklines, micro/macro, layering |
 | `skills/tufte/references/analytical-design.md` | six principles of analytical design, Snow, smallest effective difference, friendly graphic, slides, confections, color |
+| `skills/tufte/references/layout-grid.md` | Müller-Brockmann's grid for charts and dashboards: margins, baseline, columns, fields, caption placement, a dashboard template |
 | `skills/tufte/references/review-rubric.md` | scored audit template and output format |
 | `skills/tufte/references/recipes.md` | matplotlib, plotly, vega-lite, SVG recipes |
-| `skills/tufte/scripts/tufte_mpl.py` | matplotlib theme; forms `range_frame`, `frame`, `dot_dash`, `sparkline`, `slopegraph`, `quartile`; words `headline`, `source`, `note`, `callout`; `uv run --locked "skills/tufte/scripts/tufte_mpl.py" demo` renders a self-check |
+| `skills/tufte/scripts/tufte_mpl.py` | matplotlib theme; forms `range_frame`, `frame`, `dot_dash`, `sparkline`, `slopegraph`, `quartile`; words `headline`, `source`, `note`, `callout`; layout `page` (grid fields, baseline text, overlay); `uv run --locked "skills/tufte/scripts/tufte_mpl.py" demo` renders a self-check |
 | `skills/tufte/scripts/lie_factor.py` | lie factor calculator |
 | `skills/tufte/scripts/check_contrast.py` | WCAG contrast ratio (from dataink, MIT) |
 | `skills/tufte/scripts/check_palette.py` | pairwise CVD-simulated distinguishability (from dataink, MIT) |
@@ -59,6 +60,10 @@ Written from the books, then checked against whatever primary text could be read
 | The Cognitive Style of PowerPoint (essay, 2003; 2nd ed. 2006) | low resolution, pitching, the Columbia slide, technical reports over slides | edwardtufte.com notebook entries |
 
 Claims that were in an early draft and removed because no source supports them as Tufte's: "grey is the great harmonizer", an Imhof rule about the color circle, "resolution over sequence" as a phrase, "a page of 11-point type beats twenty slides", "superstition" about zero baselines, the golden ratio as Tufte's default shape.
+
+## Layout
+
+Tufte's chartjunk rule covers dark, dominant gridlines inside a chart; he does not say where the chart goes on the page. For that the skill uses Josef Müller-Brockmann's Grid Systems in Graphic Design (1981): margins, a baseline from the body leading, columns with one gutter, fields, and the rule that every panel, caption and note occupies whole fields. `references/layout-grid.md` has the rules and a dashboard template; `tufte_mpl.page` and the CSS tokens in the recipes implement them.
 
 ## Deliberately excluded
 

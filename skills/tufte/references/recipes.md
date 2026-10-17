@@ -75,6 +75,55 @@ t.source(fig, "Source: orders table, fetched 2026-10-17; a quarter is three cale
 
 For a time axis pass `xticks` as datetimes; `frame` converts them. Set `ylim` to cover both the data and the tick range, or tick labels outside the data range will not print.
 
+## Layout grid in matplotlib
+
+`page` turns Müller-Brockmann's system into axes rectangles: margins, a baseline in points, columns with one gutter (default two baselines, so hung axis labels fit), fields counted in baselines from the top. Everything is placed by column span and baseline row, so edges line up by construction.
+
+```python
+fig = plt.figure(figsize=(12, 8), dpi=200)                               # size the page first; save() uses this dpi
+pg = t.page(fig, cols=12, baseline=14, margins=(0.6, 0.6, 0.7, 0.6))   # inches: left, right, top, bottom
+pg.headline("Orders fell 12% in the quarter after the stockout", rows=2)   # raises if it needs more rows
+axs = [pg.field(c, 3, row=3, rows=12) for c in (0, 3, 6)]                # three panels, 3 columns each
+for ax, name in zip(axs, ("Revenue", "Interchange", "Fees")):
+    pg.title(ax, name)                                                    # title baseline on the grid row
+pg.text(9, 3, row=3, text="One scale for all three panels ...")          # note in the last 3 columns, top-aligned
+pg.text(0, 9, row=15, text="Revenue is interchange plus fees, before costs.")   # caption on the baseline below the row
+tbl = pg.field(0, 8, row=21, rows=10, pad=(0, 0))                        # the ledger table, a whole field lower
+pg.text(0, 12, row=33, text="Sources: ledger export, 2026-10-17.", fontsize=pg.baseline / 1.8, color=t.GREY)   # sources on a reserved row, inside the page
+pg.show()                                                                # overlay: columns, row edges, baselines
+pg.save("dashboard.png")                                                 # at page size and dpi; plain savefig would crop the margins
+```
+
+An image in a bare field: `ax = pg.field(0, 4, row=3, rows=12, pad=(0, 0)); ax.set_adjustable("datalim"); ax.imshow(img); ax.axis("off")`. Without `set_adjustable("datalim")` (or `aspect="auto"`, which stretches) matplotlib shrinks the axes rectangle to the image's aspect and the field leaves its column lines.
+
+`field` returns an Axes set one baseline inside the field's top and bottom (`pad=(1, 1)`) so the title and the tick labels stay inside the field; `pad=(0, 0)` gives the bare field. `title` sets a panel title with its baseline on the grid; `text` wraps by measurement to the span's width and sets one artist per line on its own baseline (it returns the list), raising when a word cannot fit the span; `headline` is `text` across all columns at the headline size and raises when the wrapped text needs more rows than reserved; `save` exports the page at its configured size, since the theme's `savefig.bbox="tight"` would otherwise crop the margins. Nothing global is changed. Hang axis labels into the gutter with `ax.tick_params(pad=...)` consistently across the row.
+
+## Layout grid in HTML
+
+```css
+:root { --cols: 12; --baseline: 24px; --gutter: calc(2 * var(--baseline)); --margin: 48px; --body: 14px; --caption: 12px; }
+.page  { padding: var(--margin); display: grid; grid-template-columns: repeat(var(--cols), 1fr); column-gap: var(--gutter); row-gap: 0; }
+.page > * { margin: 0; }
+.span-3 { grid-column: span 3; }  .span-4 { grid-column: span 4; }  .span-8 { grid-column: span 8; }
+.full   { grid-column: 1 / -1; }                                         /* full width at every breakpoint */
+body, p, td, th, figcaption { font-size: var(--body); line-height: var(--baseline); }
+table { border-collapse: collapse; border-spacing: 0; }  td, th { padding: 0 var(--gutter) 0 0; vertical-align: baseline; }   /* rows stay one baseline tall */
+.page > * { align-self: start; }                                          /* grid items do not stretch; first lines share a row */
+.caption { font-size: var(--caption); line-height: var(--baseline); }
+.gap-field { height: calc(6 * var(--baseline)); grid-column: 1 / -1; }   /* a section gap is a whole field */
+figure, .panel { height: calc(12 * var(--baseline)); }                   /* panel heights in baselines */
+@media (max-width: 1100px) {                         /* columns collapse in whole numbers; the baseline never changes */
+  :root { --cols: 6; }
+  .span-8 { grid-column: 1 / -1; }  .span-4, .span-3 { grid-column: span 3; }   /* spans are remapped, never left over */
+}
+@media (max-width: 700px) {
+  :root { --cols: 4; }
+  .span-8, .span-4 { grid-column: 1 / -1; }  .span-3 { grid-column: span 2; }
+}
+```
+
+Every block's height, padding and margin is a multiple of `--baseline`; with the table reset above, a note beside a table starts on the table header's baseline by sharing the same grid row and `align-self: start`. Check with a baseline overlay: `background: repeating-linear-gradient(to bottom, transparent 0 calc(var(--baseline) - 1px), rgba(255,0,0,.15) 0 var(--baseline))` on `.page` while developing.
+
 ## plotly
 
 ```python
