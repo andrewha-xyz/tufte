@@ -40,11 +40,11 @@ Three modes, chosen from the request:
 | `skills/tufte/scripts/lie_factor.py` | lie factor calculator |
 | `skills/tufte/scripts/check_contrast.py` | WCAG contrast ratio (from dataink, MIT) |
 | `skills/tufte/scripts/check_palette.py` | pairwise CVD-simulated distinguishability (from dataink, MIT) |
-| `examples/dalio/` | worked example: Ray Dalio's big debt cycle from FRED data, script, data snapshot, render |
+| `examples/dalio/` | worked example: Ray Dalio's big debt cycle from FRED data, script, data snapshot, render, and a structure view of the page |
 
 ## Example
 
-`examples/dalio/big_debt_cycle.py` draws four stacked small multiples from FRED (all-sector debt to GDP, 3-month Treasury rate, Fed assets to GDP, unemployment, 1947 to 2026) with Dalio's phases annotated on the curve. Run it with `uv run --locked examples/dalio/big_debt_cycle.py`; it writes `big-debt-cycle.rendered.png` in the working directory, and the csv snapshot is included so it reproduces offline. The preview above is the pre-rendered copy.
+`examples/dalio/big_debt_cycle.py` draws four stacked panels from FRED (all-sector debt to GDP, 3-month Treasury rate, Fed assets to GDP, unemployment, 1947 to 2026) with Dalio's phases annotated on the curve. Each panel's height banks its median segment slope toward 45 degrees on its own scale, subject to a legibility floor; the page is placed by one rule, one gap and one edge, and `--structure` renders the same page with its blocks and gaps drawn (it writes `big-debt-cycle-structure.rendered.png`; the checked-in `big-debt-cycle-structure.png` is that output). Run it with `uv run --locked examples/dalio/big_debt_cycle.py`; it writes `big-debt-cycle.rendered.png` in the working directory, and the csv snapshot is included so it reproduces offline. The preview above is the pre-rendered copy.
 
 ## Sources and verification
 

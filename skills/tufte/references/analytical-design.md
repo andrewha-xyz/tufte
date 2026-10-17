@@ -51,6 +51,20 @@ The unfriendly column is the inverse: abbreviations, vertical words, cryptic cod
 
 For the skill: annotate the finding in a sentence, on the graphic, next to the mark it describes ("Orders fell 12 percent in the quarter after the stockout" beside the dip, not "Q3 Orders" above the chart). Numbers in running text are fine; a table of three numbers beats a bar chart of three numbers. Captions and sources sit at the graphic, in smaller type.
 
+## The page: one gap, one edge
+
+Tufte wrote no layout rules; his books show one practice (text and figures integrated, notes beside the sentence, figures at a few fixed widths, separation by white space rather than rules). Reduced to what a chart page needs:
+
+- a real margin around the page, and the page exported at its size, never cropped to its ink
+- one spacing unit between every pair of blocks: headline to first title, title to plot, plot to next title, last plot to source; the unit that separates a title from its plot is the unit everywhere
+- one left edge for everything that is page text (headline, titles, captions, notes, source) and for the plot areas of a stack; a grid of small multiples has one left edge per column: page text (headline, source, running notes) on the first, each panel's title and caption on its own column; axis tick labels hang into the margin to the left of that edge, consistently across panels
+- a plot's block includes its own tick labels and any annotation that rises above the axes, so the gap below a panel starts under its last label, not under its axis line
+- a fixed page places its text explicitly and exports at page size (the theme's tight crop would remove the margins); the `headline` and `source` helpers are for the other case, one figure exported tight
+- block sizes come from the content: text height from its lines, plot height from the data (banking, `integrity.md`); the page's height is the sum, never the other way round
+- nothing else on the page: no rules between blocks, no boxes, no background fills; the gaps do the separating
+
+Check it by drawing the blocks and gaps once (the Dalio example's `--structure` flag does this) and looking for a gap that differs or an edge that drifts.
+
 ## Slides and sequence (The Cognitive Style of PowerPoint; Beautiful Evidence ch. 7)
 
 Tufte's critique is a critique of resolution: PowerPoint is a very low-resolution display method, and low resolution pushes presenters to pitch rather than present evidence, to slogans, fragments, and bullets that hide relationships, with the template's hierarchy replacing the argument's logic. His figures: presentations run at about two percent of the data richness of a routine sports-page table; a 33-slide shuttle briefing (about ten slides content-free, a fifth of every slide given to branding and titles, a persistent habit of dequantification and missing units) fit on four folded 11 by 17 sheets.
