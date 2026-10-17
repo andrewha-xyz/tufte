@@ -45,7 +45,7 @@ Three modes, chosen from the request:
 
 ## Example
 
-`examples/dalio/big_debt_cycle.py` draws four stacked panels from FRED (all-sector debt to GDP, 3-month Treasury rate, Fed assets to GDP, unemployment, 1947 to 2026) with Dalio's phases annotated on the curve. Each panel's height banks its median segment slope toward 45 degrees on its own scale, subject to a legibility floor; the page is placed on one left edge with its blocks and margin drawn by one rule, and `--structure` renders the same page with its blocks and gaps drawn (it writes `big-debt-cycle-structure.rendered.png`; the checked-in `big-debt-cycle-structure.png` is that output). Run it with `uv run --locked examples/dalio/big_debt_cycle.py`; it writes `big-debt-cycle.rendered.png` in the working directory, and the csv snapshot is included so it reproduces offline. The preview above is the pre-rendered copy.
+`examples/dalio/big_debt_cycle.py` draws four stacked panels from FRED (all-sector debt to GDP, 3-month Treasury rate, Fed assets to GDP, unemployment, 1947 to 2026) with Dalio's phases annotated on the curve. Each panel's height banks its median segment slope toward 45 degrees on its own scale, subject to a legibility floor; the page is placed by inner before outer (a title sits 0.16 in from its plot, blocks sit 0.32 in apart, the margin is 0.6 in) on one left edge, and `--structure` renders the same page with its blocks and gaps drawn (it writes `big-debt-cycle-structure.rendered.png`; the checked-in `big-debt-cycle-structure.png` is that output). Run it with `uv run --locked examples/dalio/big_debt_cycle.py`; it writes `big-debt-cycle.rendered.png` in the working directory, and the csv snapshot is included so it reproduces offline. The preview above is the pre-rendered copy.
 
 ## Sources and verification
 
@@ -68,7 +68,7 @@ Narrative arcs and slide storytelling (Knaflic), KPI tiles and gauges-versus-bul
 
 ## Known limits of `tufte_mpl.py`
 
-`slopegraph` assumes a linear y-axis and single-line names, and must be called last on its panel; in a grid, hide every slopegraph panel's axes before the first call. `headline` and `source` wrap by measuring the rendered text and may still overrun by a few pixels in unusual fonts. `note` and `callout` place text where you tell them; choosing empty space and checking the render is the author's job. The Dalio example predates the inner-before-outer rule: its title-to-plot gap equals its block gap, so it shows the edge, the blocks and the margin but not the spacing hierarchy.
+`slopegraph` assumes a linear y-axis and single-line names, and must be called last on its panel; in a grid, hide every slopegraph panel's axes before the first call. `headline` and `source` wrap by measuring the rendered text and may still overrun by a few pixels in unusual fonts. `note` and `callout` place text where you tell them; choosing empty space and checking the render is the author's job.
 
 ## License
 

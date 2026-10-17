@@ -43,8 +43,8 @@ def banked_height(s, width, ylim, floor=1.4):
     return max(floor, width / np.median(np.abs(dy[keep] / dx[keep])))
 
 
-# ---- the page: one spacing unit G everywhere, one left edge L for every block ------------
-MARGIN, G = 0.6, 0.32          # inches: page margin; the gap between any two blocks
+# ---- the page: inner before outer (GI inside a block, G between blocks, MARGIN around), one left edge L -----
+MARGIN, G, GI = 0.6, 0.32, 0.16   # inches: page margin; the gap between blocks; the gap inside a block, a title to its plot
 HANG, RIGHT = 0.55, 0.95       # inches: room for hung y labels on the left, end labels on the right
 PW = 8.0                       # plot width, inches
 LINE = 9 / 72 * 1.35           # body line height, inches (9 pt type)
@@ -75,7 +75,7 @@ W = MARGIN + HANG + PW + RIGHT + MARGIN
 measure = PW + RIGHT                                   # text blocks run from L to the page's right margin
 head_lines = textwrap.wrap(headline, int(measure * 72 / (11 * 0.55)))
 src_lines = textwrap.wrap(source, int(measure * 72 / (7.5 * 0.55)))
-H = (MARGIN + len(head_lines) * HEAD + G + sum(TITLE + G + ABOVE + h + BELOW + G for h in heights) + LABELS
+H = (MARGIN + len(head_lines) * HEAD + G + sum(TITLE + GI + ABOVE + h + BELOW + G for h in heights) + LABELS
      + len(src_lines) * LINE * 7.5 / 9 + MARGIN)
 fig = plt.figure(figsize=(W, H), dpi=200)
 L = MARGIN + HANG
@@ -89,7 +89,7 @@ axs, blocks = [], [("headline", MARGIN, len(head_lines) * HEAD)]
 for i, ((title, s, yticks, ylim), h) in enumerate(zip(panels, heights)):
     fig.text(fx(L), fy(y), title, fontsize=10, va="top", ha="left")
     blocks.append(("title", y, TITLE))
-    y += TITLE + G
+    y += TITLE + GI
     ax = fig.add_axes([fx(L), fy(y + ABOVE + h), PW / W, h / H])   # the block holds the axes plus label room
     ax.plot(s, color=t.INK, lw=0.9)
     last = i == len(panels) - 1
@@ -117,15 +117,15 @@ c.text(T("1950-01-01"), 20, "weekly series begins in 2002", fontsize=8, color=t.
 t.note(d, T("2009-10-01"), at(unemp, "2009-10-01"), "%.1f%% in October 2009" % at(unemp, "2009-10-01"), side="left", dy=6)
 t.note(d, T("2020-04-01"), at(unemp, "2020-04-01"), "%.1f%% in April 2020" % at(unemp, "2020-04-01"), dy=5)
 
-if "--structure" in sys.argv:                        # show the page's blocks and the equal gaps between them
+if "--structure" in sys.argv:                        # show the page's blocks and the two gap sizes between them
     for kind, top, hgt in blocks:
         fig.add_artist(Rectangle((fx(L), fy(top + hgt)), measure / W, hgt / H, fc="none", ec=t.ACCENT, lw=0.5, ls=":"))
     for (k1, t1, h1), (k2, t2, h2) in zip(blocks, blocks[1:]):
         fig.add_artist(Rectangle((fx(L), fy(t2)), measure / W, (t2 - t1 - h1) / H, fc=t.ACCENT, alpha=0.08, lw=0))
     fig.add_artist(Rectangle((fx(MARGIN), fy(H - MARGIN)), (W - 2 * MARGIN) / W, (H - 2 * MARGIN) / H, fc="none", ec=t.GREY, lw=0.4, ls=":"))
     fig.add_artist(plt.Line2D([fx(L), fx(L)], [fy(H - MARGIN), fy(MARGIN)], color=t.ACCENT, lw=0.4, ls=":"))
-    fig.text(fx(W - MARGIN), fy(H - MARGIN + 0.05), f"page {W:.1f} x {H:.1f} in; margin {MARGIN} in; every gap G = {G} in; "
-             f"plots {PW} in wide, axes heights banked toward 45 degrees on the drawn limits (floor {1.4} in): " + ", ".join(f"{h:.2f}" for h in heights),
+    fig.text(fx(W - MARGIN), fy(H - MARGIN + 0.05), f"page {W:.1f} x {H:.1f} in; margin {MARGIN} in; gap between blocks G = {G} in, inside a block GI = {GI} in; "
+             f"axes heights banked toward 45 degrees on the drawn limits (floor 1.4 in): " + ", ".join(f"{h:.2f}" for h in heights),
              fontsize=7, color=t.ACCENT, ha="right", va="top")
 
 out = os.path.abspath("big-debt-cycle" + ("-structure" if "--structure" in sys.argv else "") + ".rendered.png")
