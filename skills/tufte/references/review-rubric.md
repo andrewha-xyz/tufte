@@ -8,7 +8,7 @@ Input: an image, chart code, or a description. Work through the four blocks in o
 |---|---|---|
 | A1 | lie factor within 0.95 to 1.05 | measure two marks and their values; `uv run --locked "${CLAUDE_SKILL_DIR}/scripts/lie_factor.py" --data a b --graphic a2 b2` (path as given in SKILL.md) |
 | A2 | no area or volume for 1-D quantities; no 3D | look for icons, bubbles, cylinders, perspective |
-| A3 | bars start at zero; line range does not exaggerate slope | read the axis; estimate aspect ratio |
+| A3 | bars start at zero; line range does not exaggerate slope; a line chart's aspect is near 45-degree banking of its median absolute segment slope, flat and vertical segments excluded (shared across panels compared in the same units; a mixed-unit stack banks each on its own scale), not dictated by a layout; dots, bars, steps and mostly flat series use the wider-than-tall default; legibility floor overrides | read the axis; estimate the median absolute segment slope of line charts |
 | A4 | consistent intervals; money in constant currency when the span is long (rebasing to 100 is not deflation) | read tick spacing and units |
 | A5 | one scale per variable across all panels | compare panel axes |
 | A6 | enough context: the series around the highlighted change is shown | ask what was cut |
@@ -20,7 +20,7 @@ Input: an image, chart code, or a description. Work through the four blocks in o
 | # | Check | How |
 |---|---|---|
 | B1 | the graphic answers a stated comparison ("compared with what?") | name it; if you cannot, B1 = 0 |
-| B2 | form matches data: time → line/sparkline; two dates → table-graphic (slopegraph); distribution → quartile plot / dot-dash-plot; rank → sorted dot; many series → small multiples | see `data-ink.md` |
+| B2 | form matches data: a gradually changing state → line/sparkline; a state that jumps → step when change times are known, dots when not; a flow (totals per period) → one mark per period, never a smoothed line; two dates → table-graphic (slopegraph); distribution → quartile plot / dot-dash-plot; rank → sorted dot; many series → small multiples | see `integrity.md` (state or flow), `data-ink.md` |
 | B3 | no pie, gauge, dual axis, word cloud | look |
 | B4 | multivariate where the question is multivariate | count the variables shown versus the ones in the question |
 | B5 | labels on the marks, no legend lookup | look for a legend |

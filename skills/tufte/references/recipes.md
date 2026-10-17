@@ -25,7 +25,7 @@ Lock it once with `uv lock --script chart.py` and run it with `uv run --locked c
 
 Forms provided: `t.range_frame(ax, x, y)`, `t.frame(ax, xticks, yticks, xlim=None, ylim=None, span=None)` (range frame with chosen ticks; `span` makes the axis line run exactly the data's length; dates allowed), `t.dot_dash(ax, x, y)`, `t.sparkline(ax, y, label=...)`, `t.slopegraph(ax, left, right, names, highlight=(...), ylim=None)` (labels nudge apart on ties and stay inside the panel, horizontal room is reserved for the names; the lines stay true; call it last, once every title, label and panel of the figure is in place; panels that share a y-axis pass the same ascending `ylim`, and `sharex` is refused; it raises with the needed height or width when the rows or names cannot fit), `t.quartile(ax, groups, labels)`. `use()` sets the color cycle to ink, grey, accent, so ordinary `ax.plot` calls stay monochrome. Self-check: `uv run --locked "<skill dir>/scripts/tufte_mpl.py" demo` writes `tufte-demo.png` in the working directory.
 
-Small multiples, one panel per series, grid sized from the series count, one faint reference line (the mean across series) per panel instead of redrawing every series everywhere:
+Small multiples, one panel per series, grid sized from the series count, one faint reference (the mean across series) per panel instead of redrawing every series everywhere. The example is monthly totals, a flow, so each month is a dot and the reference is a step; a gradually changing state would use lines:
 
 ```python
 import math
@@ -35,19 +35,19 @@ rows = math.ceil(len(names) / cols)
 ref = np.mean([series[n] for n in names], axis=0)
 fig, axs = plt.subplots(rows, cols, figsize=(2 * cols, 1.4 * rows), sharex=True, sharey=True,
                         layout="constrained", squeeze=False)
-for ax, name in zip(axs.flat, names):
-    ax.plot(ref, color=t.LIGHT, lw=0.6)
-    ax.plot(series[name], color=t.INK, lw=1)
+for ax, name in zip(axs.flat, names):                 # monthly totals are a flow: one mark per month
+    ax.step(range(len(ref)), ref, where="mid", color=t.LIGHT, lw=0.6)
+    ax.plot(series[name], "o", ms=2, color=t.INK)
     ax.text(0.02, 0.88, name, transform=ax.transAxes, fontsize=8)
     ax.spines["left"].set_visible(False)
     ax.tick_params(axis="y", length=0)
 for ax in axs.flat[len(names):]:
     ax.axis("off")
-fig.suptitle("Monthly orders by region, 2024 to 2026; grey line is the mean of all regions",
+fig.suptitle("Monthly orders by region, 2024 to 2026; grey step is the mean of all regions",
              x=0.01, ha="left", fontsize=9)
 ```
 
-Sparkline table (one row per entity, one scale for the whole table so equal rises mean equal changes; use per-row scales only when the rows are in different units, and say so):
+Sparkline table (one row per entity, one scale for the whole table so equal rises mean equal changes; use per-row scales only when the rows are in different units, and say so). The row height comes from banking the pooled rows once (median absolute segment slope near 45 degrees); 0.25 inch per row at 5 inches wide is a starting point for monthly series, not a rule:
 
 ```python
 rows = [("Lisbon", y1), ("Porto", y2), ("Faro", y3)]

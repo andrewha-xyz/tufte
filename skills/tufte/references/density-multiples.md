@@ -31,9 +31,10 @@ Tufte's definition: a small, intense, simple, word-sized graphic with typographi
 - Tie the latest value to a number: in his glucose example a red dot marks the latest reading and the same red prints the number at the right, so the dot refers to a specific number.
 - A grey band behind the line can show the normal range, so excursions read without a scale.
 - In the exchange-rate table, color also marks the oldest and newest readings and the yearly low and high; use such marks when the question calls for them, not by default.
-- Aspect ratio: wide and short, about 5:1 for finance, 20:1 for a baseball season, 300:1 for a DNA sequence; the average slope should be about 45 degrees (Cleveland), giving a lumpy rather than spiky line.
+- Aspect ratio: wide and short, about 5:1 for finance, 20:1 for a baseball season, 300:1 for a DNA sequence; the average slope should be about 45 degrees (Cleveland), giving a lumpy rather than spiky line; in practice bank the median absolute segment slope, as in `integrity.md`.
 - Density: about 500 sparklines on an A3 sheet for monitoring data; screens run at 10 to 15 percent of paper resolution, so print the sheet when it matters. A sparkline table (one row per entity: name, sparkline, latest value, change) shows the whole year and reduces recency bias; it is Tufte's answer to the dashboard. Sparklines are approximately right rather than exactly wrong.
 - Binary outcomes (win/loss) can be shown as ticks up or down per event; Tufte warns that such sparklines can produce accidental white-space patterns that read as shape.
+- Period totals (a flow) make a dot-per-period sparkline or tiny bars, not a line; see the state-or-flow test in `integrity.md`.
 
 ## Micro/macro readings (Envisioning Information ch. 2)
 
