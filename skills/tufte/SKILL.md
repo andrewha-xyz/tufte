@@ -43,19 +43,18 @@ Banned without discussion: pie charts (and especially several of them), 3D, dual
 3. **Integrity pass** (`references/integrity.md`): compute the lie factor if any mark is scaled; check aspect ratio, baseline, context, and whether the data are ordered by the suspected cause.
 4. **Erase** (`references/data-ink.md`): remove frames, grids, fills, legends, tick clutter; try the range-frame; label directly.
 5. **Layer** (`references/analytical-design.md`): grey for structure and context, one strong color for the finding; annotate the finding in a sentence on the graphic. Words on the graphic have rules of their own: the headline and the source line are wrapped to the figure's width so a long sentence never widens the export and shrinks the panels; a label sits beside its mark only on the side where the panel is empty, otherwise it goes into empty space with a thin grey leader, and its placement is the author's responsibility, so look at the render; y-limits cover both the data and the tick range, so nothing is clipped and every tick label prints. `scripts/tufte_mpl.py` has `headline`, `source`, `note`, `callout`, `frame` for exactly this.
-6. **Place on the grid** (`references/layout-grid.md`, after Müller-Brockmann): margins, then a baseline from the body leading, then columns with one constant gutter, then fields; every panel, caption, note and table occupies whole fields, captions sit on the first baseline under their field or top-align beside it, section gaps are whole fields, panels in a row share column edges, one grid for the whole document. `scripts/tufte_mpl.py` has `page` for matplotlib (on a page, headline and sources go through `page.text` on reserved rows and the export is `page.save`); recipes give the CSS tokens for HTML.
-7. **Verify with scripts.** Always through `uv run --locked` with the quoted path (the scripts ship lockfiles):
+6. **Verify with scripts.** Always through `uv run --locked` with the quoted path (the scripts ship lockfiles):
    ```
    uv run --locked "${CLAUDE_SKILL_DIR}/scripts/lie_factor.py" --data a b --graphic a2 b2
    uv run --locked "${CLAUDE_SKILL_DIR}/scripts/check_contrast.py" '#fg' '#bg'
    uv run --locked "${CLAUDE_SKILL_DIR}/scripts/check_palette.py" '#a,#b,#c' --bg '#fff'
    ```
    Render and look at the output; never ship unseen.
-8. **Generate** from `references/recipes.md` (matplotlib via `scripts/tufte_mpl.py`, plotly, vega-lite, SVG).
+7. **Generate** from `references/recipes.md` (matplotlib via `scripts/tufte_mpl.py`, plotly, vega-lite, SVG).
 
 ## Workflow: review
 
-Use `references/review-rubric.md`. Score lie factor, data-ink ratio (estimate), data density, each integrity principle, each analytical-design principle, and the layout grid. Report findings ordered by severity (integrity > form > ink > polish), each with the rule id and a concrete rewrite. When colors are visible, sample hex values and run the scripts; otherwise mark contrast as unverified.
+Use `references/review-rubric.md`. Score lie factor, data-ink ratio (estimate), data density, each integrity principle, each analytical-design principle. Report findings ordered by severity (integrity > form > ink > polish), each with the rule id and a concrete rewrite. When colors are visible, sample hex values and run the scripts; otherwise mark contrast as unverified.
 
 ## Workflow: infographic
 
@@ -63,8 +62,8 @@ Tufte's visual confection (`references/analytical-design.md`): an assembly of vi
 
 ## Screen deviations
 
-Hover can replace some labels but never the headline annotation. Dark backgrounds invert the grey rules. Dashboards: sparkline tables and small multiples, not KPI tiles; Tufte notes screens run at a fraction of paper resolution, so print dense monitoring sheets when they matter. Responsive: small multiples reflow, never rescale axes per panel; columns collapse in whole numbers (12 to 6 to 4) and the baseline never changes.
+Hover can replace some labels but never the headline annotation. Dark backgrounds invert the grey rules. Dashboards: sparkline tables and small multiples, not KPI tiles; Tufte notes screens run at a fraction of paper resolution, so print dense monitoring sheets when they matter. Responsive: small multiples reflow, never rescale axes per panel.
 
 ## Sources
 
-VDQI 1983 (2nd ed. 2001) · Envisioning Information 1990 · Visual Explanations 1997 · Beautiful Evidence 2006 · The Cognitive Style of PowerPoint 2003 · Müller-Brockmann, Grid Systems in Graphic Design 1981 (layout only). Pages, verification status, and URLs in the repository README.
+VDQI 1983 (2nd ed. 2001) · Envisioning Information 1990 · Visual Explanations 1997 · Beautiful Evidence 2006 · The Cognitive Style of PowerPoint 2003. Pages, verification status, and URLs in the repository README.

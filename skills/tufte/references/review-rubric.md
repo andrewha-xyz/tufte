@@ -46,7 +46,6 @@ Input: an image, chart code, or a description. Work through the four blocks in o
 | D4 | contrast: text 4.5:1, marks 3:1 against background | sample hex values, `uv run --locked "${CLAUDE_SKILL_DIR}/scripts/check_contrast.py" '#fg' '#bg'`; if colors cannot be sampled, report "unverified", never guess |
 | D5 | palette readable by colorblind readers; red/green never the only distinction | `uv run --locked "${CLAUDE_SKILL_DIR}/scripts/check_palette.py" '#a,#b,...'` |
 | D6 | shape serves the slopes (wider than tall by default) | measure |
-| D7 | layout grid: panels and text blocks start and end on shared column lines; panel edges sit on row edges; page typography (headline, panel titles, captions, notes, table rows) sits on baselines, while labels positioned by data (tick labels, direct labels, notes and callouts at marks) are exempt; every vertical gap is a count of rows; captions sit on the first baseline under their field or top-align beside it; one gutter width; one grid across sections | overlay the grid (`page.show()` in tufte_mpl draws dotted column lines and row edges and solid baselines, or use a design-tool overlay); a panel edge off a row edge or a line of type off a baseline is a finding; see `layout-grid.md` |
 
 ## Output format
 
@@ -55,7 +54,7 @@ Input: an image, chart code, or a description. Work through the four blocks in o
 one sentence: publish / fix integrity first / redesign
 
 ## Scores
-A integrity  n/16   B form n/12   C ink n/10   D polish n/14
+A integrity  n/16   B form n/12   C ink n/10   D polish n/12
 
 ## Findings (most severe first)
 1. [A3] bars start at 40, not 0: the 12% difference reads as 3x. Fix: zero baseline, or switch to a dot plot if the range matters.
