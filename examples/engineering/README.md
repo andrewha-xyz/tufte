@@ -1,6 +1,6 @@
 # Acme Payments engineering: delivery dashboards for an invented team
 
-Three static pages about an engineering organisation that does not exist: four teams, 22 engineers named after the NATO alphabet, 13 April to 15 October 2026. Every pull request, deploy and incident comes from `data.py`, a seeded generator. Two stories are built into the data so the graphics have something to find: Merchant dashboard leaves its weekly release train for continuous deploys on 3 August, and Risk and disputes loses a reviewer on 6 July.
+Three static pages about an engineering organisation that does not exist: four teams, 22 engineers named after the NATO alphabet, 13 April to 15 October 2026. Every pull request, deploy and incident comes from `data.py`, a seeded generator. Two stories are built into the data so the graphics have something to find: Merchant dashboard leaves its weekly release train for continuous deploys on 3 August, and Risk and disputes loses a reviewer on 6 July. Desktop and phone images of the three pages are on the [gallery branch](https://github.com/andrewha-xyz/tufte/tree/gallery/examples/engineering).
 
 | Page | What it shows |
 |---|---|
