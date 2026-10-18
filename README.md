@@ -47,6 +47,8 @@ Three modes, chosen from the request:
 
 `examples/dalio/big_debt_cycle.py` draws four stacked panels from FRED (all-sector debt to GDP, 3-month Treasury rate, Fed assets to GDP, unemployment, 1947 to 2026) with Dalio's phases annotated on the curve. Each panel's height banks its median segment slope toward 45 degrees on its own scale, subject to a legibility floor; the page is placed by inner before outer (a title sits 0.16 in from its plot, blocks sit 0.32 in apart, the margin is 0.6 in) on one left edge, and `--structure` renders the same page with its blocks and gaps drawn (it writes `big-debt-cycle-structure.rendered.png`; the checked-in `big-debt-cycle-structure.png` is that output). Run it with `uv run --locked examples/dalio/big_debt_cycle.py`; it writes `big-debt-cycle.rendered.png` in the working directory, and the csv snapshot is included so it reproduces offline. The preview above is the pre-rendered copy.
 
+`examples/acquirer/` is ten HTML dashboards for Acme Payments, an invented merchant acquirer: monthly and weekly revenue, three ledgers, plan against actual, merchant growth, unit economics, a driver model and a forecast review. Every figure comes from a seeded generator, so nothing on them is real. Each page has a desktop and a phone JPEG in `out/jpg/`, and `check.py` verifies that nothing overflows a 360 px phone. See its README.
+
 ## Sources and verification
 
 Written from the books, then checked against whatever primary text could be read online. Status per book:
