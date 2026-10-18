@@ -1,6 +1,6 @@
 # Acme Payments: ten dashboards for an invented acquirer
 
-Ten static pages for a merchant acquirer that does not exist, drawn with the tufte skill's rules. Every figure comes from `data.py`, a seeded generator; nothing is real. Each page is one self-contained HTML file in `out/`, and `out/jpg/` holds a desktop (1440 px wide, 2x) and a phone (390 px wide, 3x) image of each.
+Ten static pages for a merchant acquirer that does not exist, drawn with the tufte skill's rules. Every figure comes from `data.py`, a seeded generator; nothing is real. Each page is one self-contained HTML file in `out/`, and `out/jpg/` holds a desktop (1440 px wide, 2x) and a phone (390 px wide, 2x) image of each.
 
 | Page | What it shows |
 |---|---|

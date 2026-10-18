@@ -130,5 +130,5 @@ if "--structure" in sys.argv:                        # show the page's blocks an
 
 out = os.path.abspath("big-debt-cycle" + ("-structure" if "--structure" in sys.argv else "") + ".rendered.png")
 with mpl.rc_context({"savefig.bbox": None}):        # the page is the figure; the theme's tight crop would remove the margins
-    fig.savefig(out)
+    fig.savefig(out, metadata={"Software": None})
 print(out, f"{W:.2f} x {H:.2f} in")

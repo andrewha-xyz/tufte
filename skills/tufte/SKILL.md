@@ -6,7 +6,6 @@ description: >-
   when asked for data-ink ratio, lie factor, chartjunk audit, data density, or to
   "make it Tufte". Three modes - design (default), review of an image, code or
   description, and infographic.
-allowed-tools: Bash(uv run --locked "${CLAUDE_SKILL_DIR}/scripts/lie_factor.py" *) Bash(uv run --locked "${CLAUDE_SKILL_DIR}/scripts/check_contrast.py" *) Bash(uv run --locked "${CLAUDE_SKILL_DIR}/scripts/check_palette.py" *) Bash(uv run --locked "${CLAUDE_SKILL_DIR}/scripts/tufte_mpl.py" *)
 ---
 
 # Tufte
