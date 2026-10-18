@@ -2,7 +2,7 @@
 
 A Claude Code skill that makes charts the way Edward Tufte's books say to: show the data, erase the ink that is not data, lie factor of one, labels on the graphic, dense small multiples, one strong color on a grey field, and a sentence that states the finding. It ships the doctrine as operating rules, the references behind them, deterministic checks, and matplotlib implementations of Tufte's own forms.
 
-![Dalio's big debt cycle in US data, drawn with the skill](examples/dalio/big-debt-cycle.png)
+![Unit economics for Acme Payments, an invented acquirer, drawn with the skill](https://raw.githubusercontent.com/andrewha-xyz/tufte/gallery/examples/acquirer/unit-economics-desktop.jpg)
 
 ## Install
 
@@ -57,7 +57,7 @@ Three modes, chosen from the request:
 
 ## Example
 
-`examples/dalio/big_debt_cycle.py` draws four stacked panels from FRED (all-sector debt to GDP, 3-month Treasury rate, Fed assets to GDP, unemployment, 1947 to 2026) with Dalio's phases annotated on the curve. Each panel's height banks its median segment slope toward 45 degrees on its own scale, subject to a legibility floor; the page is placed by inner before outer (a title sits 0.16 in from its plot, blocks sit 0.32 in apart, the margin is 0.6 in) on one left edge, and `--structure` renders the same page with its blocks and gaps drawn. Run it with `uv run --locked examples/dalio/big_debt_cycle.py`; it writes the page as a PNG in the working directory, and the csv snapshot is included so it reproduces offline. The preview above, and the structure view beside it in the folder, are pre-rendered copies.
+`examples/dalio/big_debt_cycle.py` draws four stacked panels from FRED (all-sector debt to GDP, 3-month Treasury rate, Fed assets to GDP, unemployment, 1947 to 2026) with Dalio's phases annotated on the curve. Each panel's height banks its median segment slope toward 45 degrees on its own scale, subject to a legibility floor; the page is placed by inner before outer (a title sits 0.16 in from its plot, blocks sit 0.32 in apart, the margin is 0.6 in) on one left edge, and `--structure` renders the same page with its blocks and gaps drawn. Run it with `uv run --locked examples/dalio/big_debt_cycle.py`; it writes the page as a PNG in the working directory, and the csv snapshot is included so it reproduces offline. The rendered page and its structure view are in the same folder.
 
 `examples/acquirer/` is ten HTML dashboards for Acme Payments, an invented merchant acquirer: monthly and weekly revenue, three ledgers, plan against actual, merchant growth, unit economics, a driver model and a forecast review. Every figure comes from a seeded generator, so nothing on them is real. Desktop and phone images of every page are on the [gallery branch](https://github.com/andrewha-xyz/tufte/tree/gallery), and `check.py` verifies that nothing overflows a 360 px phone. See its README.
 
