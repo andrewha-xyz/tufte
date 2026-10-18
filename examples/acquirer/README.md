@@ -28,5 +28,6 @@ Build and render:
 ```
 uv run python pages/monthly.py        # one page; each script in pages/ writes out/<name>.html
 uv run render.py                      # every page in out/ to desktop and phone JPEGs, using the installed Chrome
-uv run check.py                       # fails if a table or label overflows a 360, 375 or 390 px phone
+uv run check.py                       # fails if a page in pages.txt is missing or anything overflows a 360, 375 or 390 px phone
+# both take another example's folder first: uv run render.py ../engineering
 ```

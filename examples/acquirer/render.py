@@ -3,17 +3,23 @@
 # dependencies = ["playwright==1.47.0"]
 # ///
 """Full-page JPEGs of every page in out/: desktop (1440 px wide at 2x) and phone (390 px wide at 3x), via the locally installed Chrome.
-usage: uv run render.py [name ...]"""
+usage: uv run render.py [example dir] [name ...]; the dir defaults to this folder, names to the pages listed in its pages.txt"""
 import sys
 from pathlib import Path
 
 from playwright.sync_api import sync_playwright
 
-OUT = Path(__file__).resolve().parent / "out"
+args = sys.argv[1:]
+base = Path(args.pop(0)).resolve() if args and Path(args[0]).is_dir() else Path(__file__).resolve().parent
+OUT = base / "out"
 SIZES = {"desktop": dict(viewport=dict(width=1440, height=900), device_scale_factor=2),
          "mobile": dict(viewport=dict(width=390, height=844), device_scale_factor=3, is_mobile=True, has_touch=True)}
 
-names = sys.argv[1:] or [p.stem for p in sorted(OUT.glob("*.html"))]
+inventory = base / "pages.txt"
+names = args or (inventory.read_text().split() if inventory.exists() else [p.stem for p in sorted(OUT.glob("*.html"))])
+missing = [n for n in names if not (OUT / f"{n}.html").exists()]
+if not names or missing:
+    sys.exit(f"missing pages in {OUT}: {', '.join(missing) or 'all'}; build them first")
 (OUT / "jpg").mkdir(exist_ok=True)
 with sync_playwright() as pw:
     browser = pw.chromium.launch(channel="chrome")

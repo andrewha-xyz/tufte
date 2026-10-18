@@ -1,7 +1,7 @@
 {
   "name": "tufte",
   "description": "Tufte-native data graphics for Claude Code: the twelve rules, design/review/infographic workflows, references grounded in the five books, and scripts for lie factor, contrast, CVD-safe palettes, and matplotlib forms (range frame, dot-dash, sparkline, slopegraph, quartile plot).",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "author": {
     "name": "Andrey Ilinskiy",
     "url": "https://github.com/andrewha-xyz"

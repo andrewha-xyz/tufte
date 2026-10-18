@@ -17,6 +17,18 @@ As a personal skill (then `/tufte`): copy or symlink `skills/tufte` to `~/.claud
 
 Scripts run through [uv](https://docs.astral.sh/uv/) with `--locked`; each declares its dependencies inline and ships a lockfile, so nothing else is installed.
 
+### Marketplaces and the Claude directory
+
+This repository is a Claude Code marketplace in itself: `.claude-plugin/marketplace.json` names it `andrewha-xyz` and lists the one plugin, and `claude plugin validate .` passes on it. The two commands above install straight from GitHub `main`.
+
+To ship the plugin inside another marketplace, such as a team's, add an entry that points at this repository:
+
+```json
+{ "name": "tufte", "source": { "source": "github", "repo": "andrewha-xyz/tufte" } }
+```
+
+To list it in Anthropic's plugin directory, the maintainer submits the repository at [claude.ai/directory/manage](https://claude.ai/directory/manage), signed in on a paid plan with GitHub connected. The submission reads GitHub `main`, so push before submitting, and push again after any change a reviewer asks for before resubmitting.
+
 ## What it does
 
 Three modes, chosen from the request:
@@ -48,6 +60,8 @@ Three modes, chosen from the request:
 `examples/dalio/big_debt_cycle.py` draws four stacked panels from FRED (all-sector debt to GDP, 3-month Treasury rate, Fed assets to GDP, unemployment, 1947 to 2026) with Dalio's phases annotated on the curve. Each panel's height banks its median segment slope toward 45 degrees on its own scale, subject to a legibility floor; the page is placed by inner before outer (a title sits 0.16 in from its plot, blocks sit 0.32 in apart, the margin is 0.6 in) on one left edge, and `--structure` renders the same page with its blocks and gaps drawn (it writes `big-debt-cycle-structure.rendered.png`; the checked-in `big-debt-cycle-structure.png` is that output). Run it with `uv run --locked examples/dalio/big_debt_cycle.py`; it writes `big-debt-cycle.rendered.png` in the working directory, and the csv snapshot is included so it reproduces offline. The preview above is the pre-rendered copy.
 
 `examples/acquirer/` is ten HTML dashboards for Acme Payments, an invented merchant acquirer: monthly and weekly revenue, three ledgers, plan against actual, merchant growth, unit economics, a driver model and a forecast review. Every figure comes from a seeded generator, so nothing on them is real. Each page has a desktop and a phone JPEG in `out/jpg/`, and `check.py` verifies that nothing overflows a 360 px phone. See its README.
+
+`examples/engineering/` applies the same kit to an invented engineering team: deploys, lead time, change failures and restores, pull request flow and review load, and every engineer in one sparkline table. It is built to show distributions (quartile plots per week), events (one dot per incident) and a table that is deliberately not a ranking.
 
 ## Sources and verification
 
